@@ -24,7 +24,13 @@ class App extends Component {
     };
   }
 
+  // onAuthStateChanged and onSnapshot return unsubscribe
+  // Calling the unsubscribe function when the component is about to unmount
+  // is the best way to make sure we don't get any memory leaks in our application
+  // related to listeners still being open even if the component
+  // that cares about the listener is no longer on the page.
   unsubscribeFromAuth = null;
+  unsubscribeFromSnapshot = null;
 
   componentDidMount() {
     // add a observer to listen to userAuth change in componentDidMount
@@ -33,7 +39,7 @@ class App extends Component {
         const userDocRef = await createUserProfileDocument(userAuth);
 
         // listen to userAuth if any change in doc
-        userDocRef.onSnapshot((snapshot) => {
+        this.unsubscribeFromSnapshot = userDocRef.onSnapshot((snapshot) => {
           this.setState({
             currentUser: { id: snapshot.id, ...snapshot.data() },
           });
@@ -46,6 +52,7 @@ class App extends Component {
 
   componentWillUnmount() {
     this.unsubscribeFromAuth();
+    this.unsubscribeFromSnapshot();
   }
 
   render() {
