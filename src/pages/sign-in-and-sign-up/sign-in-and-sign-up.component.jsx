@@ -4,9 +4,9 @@ import SignIn from "../../components/sign-in/sign-in.component";
 
 const SignInAndSignUpPage = () => {
   return (
-    <h1>
+    <div>
       <SignIn />
-    </h1>
+    </div>
   );
 };
 
