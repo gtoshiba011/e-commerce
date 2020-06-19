@@ -30,6 +30,7 @@ class App extends Component {
     // add a observer in componentDidMount
     this.unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       this.setState({ currentUser: user });
+      console.log("in observer", user);
     });
   }
 
@@ -40,7 +41,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header currentUser={this.state.currentUser} />
         <Switch>
           <Route
             path="/hats"
