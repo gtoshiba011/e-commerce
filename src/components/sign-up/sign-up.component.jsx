@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import FormInput from "../form-input/form-input.component";
 import "./sign-up.styles.scss";
 import CustomButton from "../custom-button/custom-button.component";
+import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
 
 class SignUp extends Component {
   constructor(props) {
@@ -19,9 +20,30 @@ class SignUp extends Component {
     this.setState({ [name]: value });
   };
 
-  submitHandler = (event) => {
+  submitHandler = async (event) => {
     event.preventDefault();
-    this.setState({ email: "", password: "" });
+    const { displayName, email, password, confirmPassword } = this.state;
+
+    if (password !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    }
+
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+      await createUserProfileDocument(user, { displayName });
+      this.setState({
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   render() {
@@ -58,7 +80,7 @@ class SignUp extends Component {
           />
           <FormInput
             name="confirmPassword"
-            type="text"
+            type="password"
             value={confirmPassword}
             doChange={this.changeHandler}
             required
