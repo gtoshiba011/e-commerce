@@ -2,6 +2,7 @@ import React from "react";
 import "./homepage.styles.scss";
 import Directory from "../../components/directory/directory.component";
 
+// homepage get history, match, location
 const HomePage = () => {
   return (
     <div className="homepage">
