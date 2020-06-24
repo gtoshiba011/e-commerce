@@ -32,6 +32,7 @@ const Header = ({ currentUser }) => {
   );
 };
 
+// mapStateToProps: map state to props which is the input of Header
 // state: root-reducer
 // state.user: userReducer
 // state.user.currentUser: action.payload
@@ -40,4 +41,3 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(Header);
- 
