@@ -1,11 +1,15 @@
 import React, { Component } from "react";
-import "./App.css";
 import { Switch, Route } from "react-router-dom";
+import { connect } from "react-redux";
+
+import "./App.css";
+
 import HomePage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import { setCurrentUser } from "./redux/user/user.actions";
 
 const Page = (props) => {
   return (
@@ -17,12 +21,13 @@ const Page = (props) => {
 
 // only HomePage gets history and match property, so we need to pass it to MenuItem
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      currentUser: null,
-    };
-  }
+  // method 1: not Redux
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     currentUser: null,
+  //   };
+  // }
 
   // onAuthStateChanged and onSnapshot return unsubscribe
   // Calling the unsubscribe function when the component is about to unmount
@@ -33,6 +38,7 @@ class App extends Component {
   unsubscribeFromSnapshot = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
     // add a observer to listen to userAuth change in componentDidMount
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -40,12 +46,17 @@ class App extends Component {
 
         // listen to userAuth if any change in doc
         this.unsubscribeFromSnapshot = userDocRef.onSnapshot((snapshot) => {
-          this.setState({
-            currentUser: { id: snapshot.id, ...snapshot.data() },
-          });
+          // method 1: not Redux
+          // this.setState({
+          //   currentUser: { id: snapshot.id, ...snapshot.data() },
+          // });
+
+          // method 2: using Redux
+          setCurrentUser({ id: snapshot.id, ...snapshot.data() });
         });
       } else {
-        this.setState({ currentUser: userAuth });
+        // userAuth should be null here
+        setCurrentUser(userAuth);
       }
     });
   }
@@ -89,4 +100,10 @@ class App extends Component {
   }
 }
 
-export default App;
+// setCurrentUser will be the props of App
+// it is a function whose input is user
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(null, mapDispatchToProps)(App);
