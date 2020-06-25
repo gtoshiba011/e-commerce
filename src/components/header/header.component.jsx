@@ -42,9 +42,9 @@ const Header = ({ currentUser, hidden }) => {
 // state: root-reducer
 // state.user: userReducer
 // state.user.currentUser: action.payload
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
-  hidden: state.cart.hidden,
+const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
+  currentUser: currentUser,
+  hidden: hidden,
 });
 
 export default connect(mapStateToProps)(Header);
