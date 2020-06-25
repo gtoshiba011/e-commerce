@@ -1,7 +1,9 @@
 import { CartActionTypes } from "./cart.types";
+import { addItemToCart } from "./cart.utils";
 
 const INITIAL_STATE = {
   hidden: true,
+  cartItems: [],
 };
 
 const cartReducer = (currnetState = INITIAL_STATE, action) => {
@@ -10,6 +12,11 @@ const cartReducer = (currnetState = INITIAL_STATE, action) => {
       return {
         ...currnetState,
         hidden: !currnetState.hidden,
+      };
+    case CartActionTypes.ADD_ITEM:
+      return {
+        ...currnetState,
+        cartItems: addItemToCart(currnetState.cartItems, action.payload),
       };
     default:
       return currnetState;
