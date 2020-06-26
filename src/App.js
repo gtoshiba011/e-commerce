@@ -15,14 +15,6 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/user/user.actions";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 
-const Page = (props) => {
-  return (
-    <div>
-      <h1>{props.item} PAGE</h1>
-    </div>
-  );
-};
-
 // only HomePage gets history and match property, so we need to pass it to MenuItem
 class App extends Component {
   // method 1: not Redux
@@ -75,26 +67,6 @@ class App extends Component {
       <div>
         <Header />
         <Switch>
-          <Route
-            path="/hats"
-            component={(props) => <Page item="HATS" {...props} />}
-          />
-          <Route
-            path="/jackets"
-            component={(props) => <Page item="JACKETS" {...props} />}
-          />
-          <Route
-            path="/sneakers"
-            component={(props) => <Page item="SNEAKERS" {...props} />}
-          />
-          <Route
-            path="/womens"
-            component={(props) => <Page item="WOMENS" {...props} />}
-          />
-          <Route
-            path="/mens"
-            component={(props) => <Page item="MENS" {...props} />}
-          />
           <Route
             exact
             path="/signin"
