@@ -18,6 +18,13 @@ const cartReducer = (currnetState = INITIAL_STATE, action) => {
         ...currnetState,
         cartItems: addItemToCart(currnetState.cartItems, action.payload),
       };
+    case CartActionTypes.CLEAR_ITEM_FROM_CART:
+      return {
+        ...currnetState,
+        cartItems: currnetState.cartItems.filter(
+          (cartItem) => cartItem.id !== action.payload.id
+        ),
+      };
     default:
       return currnetState;
   }
